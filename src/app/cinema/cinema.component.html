@@ -1,0 +1,135 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <ul *ngIf="villes" class="list-group">
+        <li (click)="onGetCinemas(v)" *ngFor="let v of villes._embedded.villes"
+            [ngClass]="v==currentVille?'active':''" class="list-group-item clickable">
+          {{v.name}}
+        </li>
+      </ul>
+    </div>
+
+    <div class="col-md-9">
+      <div class="card card-default">
+        <div class="card-header">Liste des Cinemas</div>
+        <div class="card-body">
+
+          <ul *ngIf="cinemas" class="nav nav-pills">
+            <li (click)="onGetSalles(c)" *ngFor="let c of cinemas._embedded.cinemas"
+                [ngClass]="c==currentCinema?'active':''"
+                class="list-group-item clickable">
+              <a (click)="onGetSalles(c)" class="cinemaStyle">
+                {{c.name}}
+              </a>
+            </li>
+          </ul>
+
+
+          <div *ngIf="salles">
+            <div *ngFor="let s of salles._embedded.salles" class="row">
+              <div class="col-12">
+                <div class="card card-default">
+                  <div class="card-header">{{s.name}}</div>
+                  <div *ngIf="s.projections" class="card-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <img src="{{cinemaService.host+'/imageFilm/'+s.projections._embedded.projections[0].film.id}}"  width="300" />
+                      </div>
+                      <div class="col-md-6">
+                        <ul class="list-group">
+                          <li class="list-group-item">
+                            Séances:
+                          </li>
+                          <li (click)="getTickets(p)" *ngFor="let p of s.projections._embedded.projections"
+                              [ngClass]="p==currentProjection?'active':''" class="list-group-item clickable">
+                            {{p.seance.heureDebut}} => Prix: {{p.prix|number :'0.00'}} DH
+                          </li>
+                        </ul>
+                      </div>
+
+                    </div>
+
+                    <div *ngIf="test">
+                      <div>
+                        <div *ngIf="test.tickets" class="row">
+                          <button *ngFor="let a of test.tickets"
+                                  [disabled]="a.reserve==true"
+                                  class="btn {{getTicketClass(a)}} m-2"
+                                  (click)="onSelectTicket(a)">
+
+                            <span *ngIf="a.place">
+                              {{a.place.numero}}
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                      <div *ngIf="selectedTickets.length">
+                        <form #f="ngForm" (ngSubmit)="onPayTickets(f.value)">
+
+                          <div class="form-group">
+                            <label class="control-label">Nom Client:</label>
+                            <input class="form-control" name="nomClient" ngModel type="text"/>
+                          </div>
+                          <div class="form-group">
+                            <label class="control-label">Code Payement:</label>
+                            <input class="form-control" name="codePayement" ngModel type="text"/>
+                          </div>
+                          <button class="btn btn-success" type="submit">Payer</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+<!--<div class="container-fluid">-->
+<!--  <div class="row">-->
+<!--    <div class="col-4">-->
+<!--      <div class="text-secondary h4">Cinemas</div>-->
+<!--      <div class="list-group" *ngIf="villes">-->
+<!--        &lt;!&ndash;  TODO add class : active for active link&ndash;&gt;-->
+<!--&lt;!&ndash;        <a href="#" class="list-group-item list-group-item-action "  &ndash;&gt;-->
+<!--&lt;!&ndash;           *ngFor="let v of villes._embedded.villes" &ndash;&gt;-->
+<!--&lt;!&ndash;           (click)="onGetCinema($event,v)">&ndash;&gt;-->
+<!--&lt;!&ndash;          {{v.name}}&ndash;&gt;-->
+<!--&lt;!&ndash;        </a>&ndash;&gt;-->
+<!--       <li *ngFor="let v of villes._embedded.villes" class="list-group-item"-->
+<!--       (click)="onGetCinemas(v)">-->
+<!--{{v.name}}-->
+<!--       </li>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--&lt;!&ndash;    <div class="col-8">&ndash;&gt;-->
+<!--&lt;!&ndash;      <ul class="list-group list-group-horizontal" *ngIf="cinemas">&ndash;&gt;-->
+<!--&lt;!&ndash;        <li class="list-group-item" *ngFor="let c of cinemas._embedded.cinemas">&ndash;&gt;-->
+<!--&lt;!&ndash;          {{c.name}}&ndash;&gt;-->
+<!--&lt;!&ndash;        </li>&ndash;&gt;-->
+<!--&lt;!&ndash;      </ul>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--    <div class="col-8">-->
+<!--      <div class="panel panel-default">-->
+<!--        <div class="panel-heading">Liste des cinemas</div>-->
+<!--<div class="panel-body">-->
+<!--  <ul *ngIf="cinemas">-->
+<!--    <li *ngFor="let c of cinemas._embedded.cinemas">-->
+<!--{{c.name}}-->
+<!--    </li>-->
+<!--  </ul>-->
+<!--</div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->

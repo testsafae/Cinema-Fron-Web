@@ -1,0 +1,11 @@
+.clickable{
+  cursor: pointer;
+}
+.ticket{
+  margin: 5px;
+  width: 40px;
+
+}
+.cinemaStyle{
+  color:#000000;
+}
